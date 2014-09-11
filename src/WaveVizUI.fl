@@ -1,0 +1,431 @@
+#***********************************************************************************
+#	Copyright 2006. Akshay Mishra	
+#
+#	This file is part of WaveVIZ.
+#
+#	WaveVIZ is free software; you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation; either version 2 of the License, or
+#	(at your option) any later version.
+#	
+#	WaveVIZ is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#	
+#	You should have received a copy of the GNU General Public License
+#	along with WaveVIZ; if not, write to the Free Software
+#	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#************************************************************************************
+
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.C}
+class WaveVizUI {open
+} {
+  Function {WaveVizUI()} {open
+  } {
+    Fl_Window mainWindow {
+      label {WaveVIZ - Quantum Wavefunction Visualizer} open
+      private xywh {75 81 1115 895} type Single box UP_BOX visible
+    } {
+      Fl_Group {} {open
+        private xywh {15 160 745 720} box ENGRAVED_FRAME
+      } {
+        Fl_Group VChange {open
+          private xywh {35 365 55 450}
+        } {
+          Fl_Roller vrot {
+            label {Rotate-X}
+            callback {app->m_renderer->phi=-((Fl_Roller *)o)->value();}
+            private xywh {55 435 15 180} minimum -180 maximum 180 step 1
+          }
+        }
+        Fl_Group HChange {open
+          private xywh {295 835 210 20}
+        } {
+          Fl_Roller hrot {
+            label {Rotate about Y}
+            callback {app->m_renderer->theta=-((Fl_Roller *)o)->value();}
+            private xywh {305 840 190 15} type Horizontal minimum -180 maximum 180 step 1
+          }
+        }
+        Fl_Group MainView {open
+          private xywh {100 245 620 588} box EMBOSSED_FRAME
+        } {
+          Fl_Box app {
+            xywh {105 251 610 578} box THIN_DOWN_BOX
+            code0 {\#include "application.h"}
+            code1 {\#include "includeall.h"}
+            class CApplication
+          }
+        }
+        Fl_Slider zoom {
+          label {Distance from origin}
+          callback {app->m_renderer->m_camera->Eye.z=-((Fl_Slider *)o)->value();
+app->m_renderer->UpdateCamera();}
+          private xywh {100 195 230 20} type Horizontal box PLASTIC_THIN_DOWN_BOX minimum -2000 maximum 500 step 1 slider_size 0.060606
+        }
+        Fl_Light_Button btnCompute {
+          label {Compute Wavefunction}
+          callback {app->m_renderer->compute=((Fl_Light_Button *)o)->value();
+app->m_genfunc();}
+          xywh {540 840 180 30} box PLASTIC_UP_BOX down_box PLASTIC_DOWN_BOX selection_color 93
+        }
+        Fl_Input txtstartdensity {
+          label {Start density:}
+          private xywh {490 176 50 24}
+        }
+        Fl_Input txtenddensity {
+          label {End Density:}
+          private xywh {635 176 40 24}
+        }
+        Fl_Button btnSetDensity {
+          label {Set Density && Cube size}
+          callback {app->m_renderer->m_startdensity = 40*atof (txtstartdensity->value());
+app->m_renderer->m_enddensity = 40*atof (txtenddensity->value());
+app->m_renderer->m_cubesize=atoi (txtcubesize->value());} selected
+          private xywh {550 210 170 25}
+        }
+        Fl_Button btnreset {
+          label {Reset Time}
+          callback {app->m_renderer->t=0;}
+          private xywh {145 840 105 30}
+        }
+        Fl_Input txtcubesize {
+          label {Cube-size:}
+          private xywh {490 211 50 24}
+        }
+      }
+      Fl_Group grpSelector {
+        label {Select Eigenfunction:} open
+        private xywh {775 175 320 235} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Round_Button radHarmonic {
+          label {Harmonic Oscillator}
+          callback {if(((Fl_Check_Button *)o)->value())
+{
+	grpHarmonic->activate();
+	grpBox->deactivate();
+	grponeelectron->deactivate();
+}
+else
+{
+	grpHarmonic->deactivate();
+}}
+          xywh {800 205 155 15} type Radio down_box ROUND_DOWN_BOX
+        }
+        Fl_Round_Button radBox {
+          label {Particle-in-a-box}
+          callback {if(((Fl_Check_Button *)o)->value())
+{
+	grpHarmonic->deactivate();
+	grpBox->activate();
+	grponeelectron->deactivate();
+}
+else
+{
+	grpBox->deactivate();
+}}
+          xywh {800 240 135 15} type Radio down_box ROUND_DOWN_BOX
+        }
+        Fl_Round_Button radOneElectron {
+          label {One - electron atom}
+          callback {if(((Fl_Check_Button *)o)->value())
+{
+	grpHarmonic->deactivate();
+	grpBox->deactivate();
+	grponeelectron->activate();
+}
+else
+{
+	grponeelectron->deactivate();
+}}
+          xywh {800 275 150 15} type Radio down_box ROUND_DOWN_BOX
+        }
+        Fl_Check_Button chkmorph {
+          label Morph
+          callback {if(((Fl_Check_Button *)o)->value())
+{
+	grpmorph->activate();
+}
+else
+{
+	grpmorph->deactivate();
+}}
+          xywh {800 305 95 20} down_box DOWN_BOX
+        }
+        Fl_Input txtmorph {
+          label {Morph time (frames):}
+          xywh {1010 301 35 24}
+        }
+        Fl_Group grpmorph {open
+          private xywh {800 330 125 70} box ENGRAVED_FRAME deactivate
+        } {
+          Fl_Round_Button radmorph12 {
+            label {1-->2}
+            xywh {820 345 105 15} type Radio down_box ROUND_DOWN_BOX
+          }
+          Fl_Round_Button radmorph21 {
+            label {2-->1}
+            xywh {820 370 105 15} type Radio down_box ROUND_DOWN_BOX
+          }
+        }
+      }
+      Fl_Group grpHarmonic {
+        label {Harmonic oscillator parameters:} open
+        private xywh {775 520 320 75} box ENGRAVED_FRAME align 5 deactivate
+      } {
+        Fl_Input txtw1 {
+          label {n1:}
+          xywh {890 546 20 24}
+        }
+        Fl_Input txtw2 {
+          label {n2:}
+          xywh {940 546 20 24}
+        }
+        Fl_Input txtw3 {
+          label {n3:}
+          xywh {995 546 20 24}
+        }
+        Fl_Input txtw0 {
+          label {w0:}
+          xywh {825 546 30 24}
+        }
+        Fl_Input txtw4 {
+          label {n4:}
+          xywh {1045 546 20 24}
+        }
+      }
+      Fl_Group grpBox {
+        label {Particle-in-a-box parameters:} open
+        private xywh {775 620 325 120} box ENGRAVED_FRAME align 5 deactivate
+      } {
+        Fl_Input txtlx {
+          label {Lx:}
+          xywh {810 642 30 21}
+        }
+        Fl_Input txtly {
+          label {Ly:}
+          xywh {810 672 30 23}
+        }
+        Fl_Input txtlz {
+          label {Lz:}
+          xywh {810 701 30 24}
+        }
+        Fl_Input txtnx1 {
+          label {nx1:}
+          xywh {880 640 20 24}
+        }
+        Fl_Input txtny1 {
+          label {ny1:}
+          xywh {880 671 20 24}
+        }
+        Fl_Input txtnz1 {
+          label {nz1:}
+          xywh {880 701 20 24}
+        }
+        Fl_Input txtnx2 {
+          label {nx2:}
+          xywh {940 640 20 24}
+        }
+        Fl_Input txtny2 {
+          label {ny2:}
+          xywh {940 671 20 24}
+        }
+        Fl_Input txtnz2 {
+          label {nz2:}
+          xywh {940 701 20 24}
+        }
+        Fl_Input txtnx3 {
+          label {nx3:}
+          xywh {1000 640 20 24}
+        }
+        Fl_Input txtny3 {
+          label {ny3:}
+          xywh {1000 671 20 24}
+        }
+        Fl_Input txtnz3 {
+          label {nz3:}
+          xywh {1000 701 20 24}
+        }
+        Fl_Input txtnx4 {
+          label {nx4:}
+          xywh {1060 642 20 23}
+        }
+        Fl_Input txtny4 {
+          label {ny4:}
+          xywh {1060 672 20 23}
+        }
+        Fl_Input txtnz4 {
+          label {nz4:}
+          xywh {1060 702 20 23}
+        }
+      }
+      Fl_Group grponeelectron {
+        label {1-electron atom parameters:} open
+        private xywh {775 765 320 115} box ENGRAVED_FRAME align 5 deactivate
+      } {
+        Fl_Input txtz {
+          label {Z:}
+          xywh {800 781 25 24}
+        }
+        Fl_Input txtn1 {
+          label {n1:}
+          xywh {855 781 25 24}
+        }
+        Fl_Input txtl1 {
+          label {l1:}
+          xywh {855 811 25 24}
+        }
+        Fl_Input txtm1 {
+          label {m1:}
+          xywh {855 841 25 24}
+        }
+        Fl_Input txtn2 {
+          label {n2:}
+          xywh {925 781 25 24}
+        }
+        Fl_Input txtl2 {
+          label {l2:}
+          xywh {925 811 25 24}
+        }
+        Fl_Input txtm2 {
+          label {m2:}
+          xywh {925 841 25 24}
+        }
+        Fl_Input txtn3 {
+          label {n3:}
+          xywh {1000 781 25 24}
+        }
+        Fl_Input txtl3 {
+          label {l3:}
+          xywh {1000 811 25 24}
+        }
+        Fl_Input txtm3 {
+          label {m3:}
+          xywh {1000 841 25 24}
+        }
+        Fl_Input txtn4 {
+          label {n4:}
+          xywh {1060 781 25 24}
+        }
+        Fl_Input txtl4 {
+          label {l4:}
+          xywh {1060 811 25 24}
+        }
+        Fl_Input txtm4 {
+          label {m4:}
+          xywh {1060 841 25 24}
+        }
+      }
+      Fl_Group grpsuperpose {
+        label {Select functions to superpose:} open
+        private xywh {775 435 320 60} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Check_Button chkwave2 {
+          label 2
+          xywh {890 460 30 15} down_box DOWN_BOX
+        }
+        Fl_Check_Button chkwave3 {
+          label 3
+          xywh {965 460 30 15} down_box DOWN_BOX
+        }
+        Fl_Check_Button chkwave4 {
+          label 4
+          xywh {1025 460 30 15} down_box DOWN_BOX
+        }
+        Fl_Check_Button chkwave1 {
+          label 1
+          xywh {825 460 30 15} down_box DOWN_BOX
+        }
+      }
+      Fl_Group grpstate1 {
+        label {State 1 coefficients:} open
+        private xywh {445 35 315 110} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Input txtre11 {
+          label {Re1:}
+          xywh {490 61 30 24}
+        }
+        Fl_Input txtre12 {
+          label {Re2:}
+          xywh {560 61 30 24}
+        }
+        Fl_Input txtre13 {
+          label {Re3:}
+          xywh {630 61 30 24}
+        }
+        Fl_Input txtre14 {
+          label {Re4:}
+          xywh {705 61 30 24}
+        }
+        Fl_Input txtim11 {
+          label {Im1:}
+          xywh {490 96 30 24}
+        }
+        Fl_Input txtim12 {
+          label {Im2:}
+          xywh {560 96 30 24}
+        }
+        Fl_Input txtim13 {
+          label {Im3:}
+          xywh {630 96 30 24}
+        }
+        Fl_Input txtim14 {
+          label {Im4:}
+          xywh {705 96 30 24}
+        }
+      }
+      Fl_Group grpstate2 {
+        label {State 2 coefficients:} open
+        private xywh {775 35 320 110} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Input txtre21 {
+          label {Re1:}
+          xywh {825 61 30 24}
+        }
+        Fl_Input txtre22 {
+          label {Re2:}
+          xywh {895 61 30 24}
+        }
+        Fl_Input txtre23 {
+          label {Re3:}
+          xywh {965 61 30 24}
+        }
+        Fl_Input txtre24 {
+          label {Re4:}
+          xywh {1040 61 30 24}
+        }
+        Fl_Input txtim21 {
+          label {Im1:}
+          xywh {825 96 30 24}
+        }
+        Fl_Input txtim22 {
+          label {Im2:}
+          xywh {895 96 30 24}
+        }
+        Fl_Input txtim23 {
+          label {Im3:}
+          xywh {965 96 30 24}
+        }
+        Fl_Input txtim24 {
+          label {Im4:}
+          xywh {1040 96 30 24}
+        }
+      }
+      Fl_Button {} {
+        label {WaveVIZ - Wavefunction Visualization Tool}
+        xywh {15 20 420 125} box PLASTIC_THIN_UP_BOX down_box PLASTIC_THIN_UP_BOX labeltype EMBOSSED_LABEL labelsize 20 labelcolor 186
+      }
+    }
+  }
+  Function {show(int argc, char **argv, PCOMPFUNC ptr)} {open
+  } {
+    code {mainWindow->show(argc, argv);
+app->make_current();
+app->InitApplication (ptr);
+app->show();} {}
+  }
+} 
