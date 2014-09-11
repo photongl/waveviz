@@ -87,6 +87,4 @@ WaveVIZ was coded by me as part of a summer project in real-time 3D rendering at
 Instrumental to the project were my supervisors - Dr. Sonia G Schirmer (DAMTP, University of Cambridge) and Dr. Frank C. Langbein (School of Computer Science, Cardiff University) - who initiated the project as an idea and provided essential insight into the architecture and implementation of both the renderer and the demo tool.
 
 -Akshay Mishra,
-Department of Mechanical Engineering,
-Indian Institute of Technology, Kharagpur (WB) - India
-(akshaym@iitkgp.ac.in - http://akshay.6te.net)
+(akshaym@sybilresearch.com - http://www.akshaymishra.com)
