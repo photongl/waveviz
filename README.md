@@ -78,7 +78,7 @@ Please note that FLTK and GLEW MUST be installed before installing WaveVIZ.
 ==========
 3. Contact Info
 ==========
-Further documentation for developers and users is provided in the files "developer-manual" and "user-manual" respectively. Documentation regarding the use of the demo tool is included in the "demo-manual". If you encounter any bugs or want to make comments/suggestions etc. please drop a a mail at akshaym@iitkgp.ac.in
+Further documentation for developers and users is provided in the files "developer-manual" and "user-manual" respectively. Documentation regarding the use of the demo tool is included in the "demo-manual". If you encounter any bugs or want to make comments/suggestions etc. please drop a a mail at akshaym@sybilresearch.com
 
 ===============
 4. Acknowledgements
